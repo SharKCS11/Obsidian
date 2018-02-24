@@ -1,2 +1,2 @@
-# meshLAN
-A peer-to-peer location-based file network
+## Obsidian ##
+Decentralized chat software with facial authentication
