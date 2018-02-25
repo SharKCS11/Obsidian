@@ -1,5 +1,5 @@
 //var host = "127.0.0.1"; //localhost
-var host = "localhost";
+//var host = "obsidian.com";
 var port = 8080; //port
 
 //dependancies
@@ -102,4 +102,4 @@ app.post('/new', function(req, res) {
     });
     res.send();
 });
-app.listen(port, host);
+app.listen(8080, function(){console.log("Server Started on port: " + port)});
