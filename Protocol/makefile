@@ -8,10 +8,10 @@ SOURCES = meshchat.cpp
 ################
 EXEC = meshchat.exe
 ################
-CFLAGS = -std=c++14 -O3 -Wall
+CFLAGS = -pthread -std=c++14 -O3 -Wall
 
-$(EXEC): $(OBJ)
-	$(CC) $(CFLAGS) $(SOURCES)  -o $(EXEC)
+all: meshchat.cpp
+	$(CC) $(CFLAGS) meshchat.cpp -o meshchat.exe
 
 $(OBJDIR)/%.o: %.cpp | $(OBJDIR)
 	$(CC) $(CFLAGS) -MM -c -o $@ $<
