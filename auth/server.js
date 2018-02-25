@@ -46,16 +46,21 @@ app.post('/api', function(req, res) {
             client.face.identify(person_faceid, PersonGroupID).then(
                 function(responseIdentify) {
                     console.log("Person Exists");
-                    console.log(responseIdentify[0].candidates[0].personId);
-                    client.face.person.addFace(PersonGroupID, responseIdentify[0].candidates[0].personId, {
-                        data: req.body
-                    }).then(function(resAddPerson) {
-                        client.face.personGroup.trainingStart(PersonGroupID).
-                        then(function(resTrain) {
-                            console.log("Training Done");
+                    if (responseIdentify[0].candidates.length != 0) {
+                        console.log(responseIdentify);
+                        console.log(responseIdentify[0].candidates[0].personId);
+                        client.face.person.addFace(PersonGroupID, responseIdentify[0].candidates[0].personId, {
+                            data: req.body
+                        }).then(function(resAddPerson) {
+                            client.face.personGroup.trainingStart(PersonGroupID).
+                            then(function(resTrain) {
+                                console.log("Training Done");
+                            });
                         });
-                    });
-                    res.send();
+                        res.send();
+                    } else {
+                        res.status(500).send('Something broke!');
+                    }
                 },
                 function(identifyReject) {
                     console.log(identifyReject);
@@ -102,4 +107,4 @@ app.post('/new', function(req, res) {
     });
     res.send();
 });
-app.listen(8080, function(){console.log("Server Started on port: " + port)});
+app.listen(8080, function() { console.log("Server Started on port: " + port) });
