@@ -10,10 +10,11 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 // Includes from STL
-#include <vector>
 #include <thread>
+#include <mutex>
 #include <queue>
 #include <chrono>
+#include <functional>
 
 //Socket-specific definitions
 /*
@@ -27,49 +28,74 @@ struct sockaddr_in { //STRUCTURE OF A SOCKET ADDRESS
 */
 #define SOCKET_CONN_TYPE AF_INET
 #define SUBNET_MASK 0xC0A80100
-#define MSGSIZE 4096
+#define MSGBUFFSIZE 2040
+#define MSGSIZE 2048
 #define MAGICPORT 50001
 
 constexpr uint32_t BROADCAST_IP = SUBNET_MASK | 0xFF;
 
-//Pass nodes by value everywhere.
-typedef struct{
-    sockaddr_in address;
-} Node;
 
 typedef std::chrono::milliseconds ms_t;
 
-typedef struct{
+
+typedef struct Message{
+    char text[MSGBUFFSIZE];
     unsigned long long timestamp;
-    std::string text;
+    //Default ctor
+    Message(){}
+    //Copy ctor
+    Message(Message &oth)
+    :timestamp(oth.timestamp)
+    {
+        memcpy(this->text, oth.text, MSGBUFFSIZE);
+    }
 } Message;
 
 /* MeshClient will be used as a namespace for all
 global network-related functions and data */
+
+class MsgComp
+{
+public:
+    bool operator()(Message* lhs, Message* rhs)
+    {
+        return lhs->timestamp > rhs->timestamp;
+    }
+};
+
 class MeshClient
 {
 public:
 //Class variables (globals)
-    static std::vector<Node> neighbours;
+    static std::string name;
     static int udsock; //listening socket
     static int outgoing; //sending socket
     static sockaddr_in loc_addr; //listening address
     static sockaddr_in outbound_addr; //sending address
-    static std::chrono::steady_clock CLK;
+    static std::priority_queue<Message*, std::vector<Message*>, MsgComp > msgque;
+    static std::mutex quelock;
+    static std::ofstream handle_log;
 //Class functions (globals)
-    static void node_init();
-    static void node_init(Node connection);
+    static void node_init(std::string name_in);
 private:
     //threaded/blocking functions
     static void listen();
     static void getUserInput();
-
+    static void request_handler();
+    //other
     static void setup_socket();
     static unsigned long long getTime();
     static void getFormattedTimeStamp(char* buf, unsigned long long timecount);
 
 };
 
+/** UDP Protocol Description:
+Every message will be preceded by a numeric opcode.
+1 - Message
+2 - Leave
+3 - Shutdown whole network
 
+Message format will be: "<op> <name> <msg>" with a total of up to 2048B.
+**/
 
 #endif // MESHCHAT_H
