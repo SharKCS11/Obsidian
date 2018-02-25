@@ -28,6 +28,7 @@ struct sockaddr_in { //STRUCTURE OF A SOCKET ADDRESS
 #define SOCKET_CONN_TYPE AF_INET
 #define SUBNET_MASK 0xC0A80100
 #define MSGSIZE 4096
+#define MAGICPORT 50001
 
 constexpr uint32_t BROADCAST_IP = SUBNET_MASK | 0xFF;
 
@@ -50,16 +51,22 @@ class MeshClient
 public:
 //Class variables (globals)
     static std::vector<Node> neighbours;
-    static int udsock;
-    static sockaddr_in loc_addr;
+    static int udsock; //listening socket
+    static int outgoing; //sending socket
+    static sockaddr_in loc_addr; //listening address
+    static sockaddr_in outbound_addr; //sending address
     static std::chrono::steady_clock CLK;
 //Class functions (globals)
     static void node_init();
     static void node_init(Node connection);
-    static void listen();
 private:
-    static void setup_socket();
+    //threaded/blocking functions
+    static void listen();
     static void getUserInput();
+
+    static void setup_socket();
+    static unsigned long long getTime();
+    static void getFormattedTimeStamp(char* buf, unsigned long long timecount);
 
 };
 

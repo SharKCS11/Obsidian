@@ -7,6 +7,8 @@
 #include <netinet/in.h>
 #include <iostream>
 
+#define BCIP 0xC0A801FF
+
 using namespace std;
 
 int main(int argc, char** argv)
@@ -25,10 +27,14 @@ int main(int argc, char** argv)
     struct sockaddr_in serv_addr;
 	memset((char *)&serv_addr, 0, sizeof(serv_addr));
     serv_addr.sin_family = AF_INET;
-    serv_addr.sin_addr.s_addr = htonl(INADDR_ANY);
-    serv_addr.sin_port = htons(atoi(argv[1]));
+    serv_addr.sin_addr.s_addr = htonl(BCIP);
+    serv_addr.sin_port = htons(50001);
 	char msg_buffer[4096];
-	strcpy(msg_buffer, "Message!");
+	string message_str;
+	while(getline(cin, message_str)){
+		strcpy(msg_buffer, message_str.c_str());
+	}
+	
 	if( sendto(clisock, msg_buffer, strlen(msg_buffer), 0, (struct sockaddr *)&serv_addr, sizeof(serv_addr)) < 0 )
 	{
 		perror("Sendto failed.");

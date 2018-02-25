@@ -1,3 +1,4 @@
 Protocol/*.o
 Protocol/*.exe
 Protocol/Test_Clients/*.exe
+Protocol/llog.txt
