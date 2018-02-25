@@ -64,7 +64,7 @@ app.post('/api', function(req, res) {
                 },
                 function(identifyReject) {
                     console.log(identifyReject);
-                    res.status(500).send('Something broke!')
+                    res.status(500).send("500")
                 });
         },
         function(reason) {
