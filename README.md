@@ -15,7 +15,7 @@ Decentralized chat software with facial authentication
 ## BUILD/INSTALLATION INSTRUCTIONS
   * Azure
     * Navigate into Auth folder, run node server.js from terminal
-  * ./meshchat.exe <name>
+  * ./meshchat.exe [name]
     * makefile, run make
 
 ## OTHER SOURCES OF DOCUMENTATION
