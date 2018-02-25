@@ -64,8 +64,10 @@ void MeshClient::setup_socket()
     }*/
     outbound_addr.sin_family = AF_INET;
     //outbound_addr.sin_addr.s_addr = htonl(BROADCAST_IP);
-    outbound_addr.sin_addr.s_addr = htonl(INADDR_ANY);
+    outbound_addr.sin_addr.s_addr = inet_addr("192.168.1.255");
     outbound_addr.sin_port = htons(MAGICPORT); //OS assigns port.
+    int on=1;
+    setsockopt(udsock, SOL_SOCKET, SO_BROADCAST, &on, sizeof(on));
 
 }
 
@@ -78,7 +80,7 @@ void MeshClient::getUserInput()
     if( sendto(udsock, &entry_msg, sizeof(entry_msg), 0,
                (struct sockaddr *)&outbound_addr, sizeof(outbound_addr)) < 0 )
 	{
-		perror("Sendto failed.");
+		perror("Sendto first failed.");
 		return;
 	}
     string line;
