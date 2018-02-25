@@ -23,7 +23,6 @@ void MeshClient::node_init(string name_in)
 
     thread t_listen(MeshClient::listen);
     t_listen.detach();
-    cout << "Thread t is listening." <<endl;
     getUserInput();
 }
 
@@ -137,13 +136,9 @@ void MeshClient::listen()
 void MeshClient::request_handler()
 {
     //cout << "Called request handler" <<endl;
-    handle_log << "Called request handler" <<endl;
     quelock.lock();
     while(!msgque.empty()){
         Message* head = msgque.top();
-        //cout << "stuff" <<endl;
-        //cout << head->text << endl;
-        handle_log << head->text << endl;
         msgque.pop();
         char tsbuf[50];
         getFormattedTimeStamp(tsbuf, head->timestamp);
@@ -180,7 +175,7 @@ void MeshClient::getFormattedTimeStamp(char* buf, unsigned long long timecount)
     buf += sprintf(buf, "%d-",1900+date->tm_year);
     buf += sprintf(buf, "%s-",month_names[date->tm_mon]);
     buf += sprintf(buf, "%d",date->tm_mday);
-    buf += sprintf(buf, "@@%d:%d:%d.%d", date->tm_hour, date->tm_min, date->tm_sec, mils);
+    buf += sprintf(buf, "@%d:%d:%d.%d", date->tm_hour, date->tm_min, date->tm_sec, mils);
 }
 
 
