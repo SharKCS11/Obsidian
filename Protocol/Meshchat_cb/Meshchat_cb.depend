@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1519527298 source:/home/sharang/Development/Miscellany/Obsidian/Protocol/meshchat.cpp
+	<iostream>
+	"meshchat.h"
+
+1519527272 /home/sharang/Development/Miscellany/Obsidian/Protocol/meshchat.h
+
