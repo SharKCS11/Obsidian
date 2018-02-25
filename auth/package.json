@@ -1,0 +1,29 @@
+{
+  "name": "meshlan",
+  "version": "1.0.0",
+  "description": "some type of backend api that queries azure",
+  "main": "server.js",
+  "scripts": {
+    "test": "node server.js",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SharKCS11/Obsidian.git"
+  },
+  "keywords": [
+    "api"
+  ],
+  "author": "Shang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SharKCS11/Obsidian/issues"
+  },
+  "homepage": "https://github.com/SharKCS11/Obsidian#readme",
+  "dependencies": {
+    "async": "^2.6.0",
+    "express": "^4.16.2",
+    "multer": "^1.3.0",
+    "project-oxford": "^1.10.0"
+  }
+}
